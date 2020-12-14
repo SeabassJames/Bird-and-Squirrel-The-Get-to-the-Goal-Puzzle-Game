@@ -50,7 +50,7 @@ namespace GMUCS425
     box2.width=other->sprite->getWidth(other->scale);
     box2.height=other->sprite->getHeight(other->scale);
 
-    return box1.intersect(box2);
+    return box1.intersect(box2) && ((this->birdcollision && other->birdcollision) || (this->squirrelcollision && other->squirrelcollision));
   }
 
   void MyAgent::draw_bounding_box()
@@ -80,7 +80,7 @@ namespace GMUCS425
     if(!this->visible) return; //not visible...
     //setup positions and ask sprite to draw something
     this->sprite->display(x, y, scale, degree, NULL, this->left?SDL_FLIP_NONE:SDL_FLIP_HORIZONTAL);
-    draw_bounding_box();
+    //draw_bounding_box();
   }
 
   void MyZombieAgent::update()
@@ -138,7 +138,7 @@ namespace GMUCS425
     if(!this->visible) return; //not visible...
     //setup positions and ask sprite to draw something
     this->sprite->display(x, y, scale, degree, NULL, this->ccw?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
-    draw_bounding_box();
+    //draw_bounding_box();
   }
 
 

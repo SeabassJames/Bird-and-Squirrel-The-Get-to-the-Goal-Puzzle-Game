@@ -176,12 +176,14 @@ namespace GMUCS425
 		if (!this->visible) return; //not visible...
 		//setup positions and ask sprite to draw something
 		this->sprite->display(x, y, scale, degree, NULL, this->left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-		draw_bounding_box();
+		//draw_bounding_box();
 		//display goal & path
+		/*
 		if (this->has_goal)
 		{
 			draw_goal_and_path();
 		}//end if
+		*/
 	}
 
 	void MyBirdAgent::draw_goal_and_path()
@@ -209,6 +211,7 @@ namespace GMUCS425
 
 	void MyBirdAgent::draw_HUD()
 	{
+		return;
 		std::stringstream ss;
 		ss << "x: " << x << " y: " << y;
 		SDL_Renderer * renderer = getMyGame()->getRenderer();

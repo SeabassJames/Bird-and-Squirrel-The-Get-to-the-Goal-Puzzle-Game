@@ -10,9 +10,10 @@ namespace GMUCS425
 	class MySquirrelAgent : public MyAgent
 	{
 	public:
-		MySquirrelAgent(bool movable = true, bool collision = true) :MyAgent(movable, true, false, collision)
+		MySquirrelAgent(bool movable = true, bool collision = true) :MyAgent(movable, false, collision, collision)
 		{
 			dx = dy = 0;collide_with = NULL;has_goal = left = false;planner = NULL;
+			this->isSquirrel = true;
 		}
 
 		virtual void handle_event(SDL_Event & e);

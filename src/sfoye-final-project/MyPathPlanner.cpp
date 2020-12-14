@@ -71,14 +71,13 @@ float MyPathPlanner::cost(const Point2d& pos1, const Point2d& pos2)
 
   //Hint: there are many correct implementations, use your imagination
   float scales = 0;
-  int x0 = pos1[0];
 
   float dx = pos2[0] - pos1[0];
   float dy = pos2[1] - pos1[1];
   float dist = sqrt(dx * dx + dy * dy);
   float c = 0;
   int iters = 10;
-  if (dist < 1) {
+  if ((dist < 1) && (m_agent->isSquirrel)) { //don't apply terrain to bird
 	  for (int i = 0; i < iters; i++) {
 		  int x = pos1[0] + dx * i / iters;
 		  int y = pos1[1] + dx * i / iters;
@@ -119,19 +118,19 @@ bool MyGridPathPlanner::build() //build a grid
 	  n.pos = Point2d(j*cell_w, i*cell_h);
 	  //free
 	  n.free = !collision_detection(n.pos);
-	  
+	  /*
 	  if (n.free) {
 		  
-		  if ((i > 0) /*&& !collision_detection(Point2d((n.pos[0] ), (n.pos[0] - cell_h / 2)))*/) {// top edge
+		  if ((i > 0)){// && !collision_detection(Point2d((n.pos[0] ), (n.pos[0] - cell_h / 2)))) {// top edge
 			  n.neighbors.push_front(&m_grid[i - 1][j]);
 		  }
-		  if ((j > 0) /*&& !collision_detection(Point2d((n.pos[0] - cell_w / 2), (n.pos[0] )))*/) {//left edge
+		  if ((j > 0) ) {//&& !collision_detection(Point2d((n.pos[0] - cell_w / 2), (n.pos[0] )))) {//left edge
 			  n.neighbors.push_front(&m_grid[i][j - 1]);
 		  }
-		  if ((j < m_width-1) /*&& !collision_detection(Point2d((n.pos[0] + cell_w / 2), (n.pos[0])))*/) {//right edge
+		  if ((j < m_width-1)) {// && !collision_detection(Point2d((n.pos[0] + cell_w / 2), (n.pos[0])))) {//right edge
 			  n.neighbors.push_front(&m_grid[i][j + 1]);
 		  }
-		  if ((i < m_height-1) /*&& !collision_detection(Point2d((n.pos[0]), (n.pos[0] - cell_h / 2)))*/) {//bottom edge
+		  if ((i < m_height-1)) {//&& !collision_detection(Point2d((n.pos[0]), (n.pos[0] - cell_h / 2)))) {//bottom edge
 			  n.neighbors.push_front(&m_grid[i + 1][j]);
 		  }
 
@@ -140,7 +139,40 @@ bool MyGridPathPlanner::build() //build a grid
       // We consider 4-connection neighbors here. (N, W, E, S)
       // A node n has a neighobor node m iff both m and n are free (i.e. not occupied)
       // Thus, if a node is not free (i.e. occupied), it should not have any neighbors
-      
+      */
+
+	  if (n.free) {
+		  //if ((j > 0) && (i > 0) && !collision_detection(Point2d((n.pos[0] - cell_w/2), (n.pos[0] - cell_h/2)))) {//top left corner
+		  if ((j > 0) && (i > 0) && !collision_detection(Point2d((n.pos[0] - cell_w / 2), (n.pos[0]))) && !collision_detection(Point2d((n.pos[0]), (n.pos[0] - cell_h / 2)))) {//top left corner
+			  n.neighbors.push_front(&m_grid[i - 1][j - 1]);
+		  }
+		  if ((i > 0) /*&& !collision_detection(Point2d((n.pos[0] ), (n.pos[0] - cell_h / 2)))*/) {// top edge
+			  n.neighbors.push_front(&m_grid[i - 1][j]);
+		  }
+		  if ((j < m_width - 1) && (i > 0) && !collision_detection(Point2d((n.pos[0]), (n.pos[0] - cell_h / 2))) && !collision_detection(Point2d((n.pos[0] + cell_w / 2), (n.pos[0])))) {//top right corner
+			  n.neighbors.push_front(&m_grid[i - 1][j + 1]);
+		  }
+		  if ((j > 0) /*&& !collision_detection(Point2d((n.pos[0] - cell_w / 2), (n.pos[0] )))*/) {//left edge
+			  n.neighbors.push_front(&m_grid[i][j - 1]);
+		  }
+		  if ((j < m_width - 1) /*&& !collision_detection(Point2d((n.pos[0] + cell_w / 2), (n.pos[0])))*/) {//right edge
+			  n.neighbors.push_front(&m_grid[i][j + 1]);
+		  }
+		  if ((j > 0) && (i < m_height - 1) && !collision_detection(Point2d((n.pos[0]), (n.pos[0] + cell_h / 2))) && !collision_detection(Point2d((n.pos[0] - cell_w / 2), (n.pos[0])))) {//bottom left corner
+			  n.neighbors.push_front(&m_grid[i + 1][j - 1]);
+		  }
+		  if ((i < m_height - 1) /*&& !collision_detection(Point2d((n.pos[0]), (n.pos[0] - cell_h / 2)))*/) {//bottom edge
+			  n.neighbors.push_front(&m_grid[i + 1][j]);
+		  }
+		  if ((j < m_width - 1) && (i < m_height - 1) && !collision_detection(Point2d((n.pos[0]), (n.pos[0] + cell_h / 2))) && !collision_detection(Point2d((n.pos[0] + cell_w / 2), (n.pos[0])))) {//bottom right corner
+			  n.neighbors.push_front(&m_grid[i + 1][j + 1]);
+		  }
+
+	  }
+	  //Note: 
+	  // We consider 8-connection neighbors here. (N, W, E, S, NE, NW, SE, SW)
+	  // A node n has a neighobor node m iff both m and n are free (i.e. not occupied)
+	  // Thus, if a node is not free (i.e. occupied), it should not have any neighbors
 
     }//end j
   }//end i

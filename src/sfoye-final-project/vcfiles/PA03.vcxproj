@@ -167,7 +167,6 @@
     <ClInclude Include="..\MySprite.h" />
     <ClInclude Include="..\MySquirrelAgent.h" />
     <ClInclude Include="..\MyTexture.h" />
-    <ClInclude Include="MySquirrelAgent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

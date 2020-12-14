@@ -14,7 +14,7 @@ int main( int argc, char* argv[] )
 	GMUCS425::setMyGame(game);
 
 	//Start up SDL and create window
-	if( !game->init("CS425 PA03: Pathing") )
+	if( !game->init("Bird and Squirrel") )
 	{
 		std::cerr<<"ERROR: Failed to initialize!"<<std::endl;
 	}

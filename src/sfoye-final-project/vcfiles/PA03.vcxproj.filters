@@ -119,9 +119,6 @@
     <ClInclude Include="..\MyDragonAgent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MySquirrelAgent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\MyBirdAgent.h">
       <Filter>Header Files</Filter>
     </ClInclude>

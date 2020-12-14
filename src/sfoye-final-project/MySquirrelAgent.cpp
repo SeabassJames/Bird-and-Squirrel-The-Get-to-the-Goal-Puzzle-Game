@@ -177,12 +177,14 @@ namespace GMUCS425
 		if (!this->visible) return; //not visible...
 		//setup positions and ask sprite to draw something
 		this->sprite->display(x, y, scale, degree, NULL, this->left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-		draw_bounding_box();
+		//draw_bounding_box();
 		//display goal & path
+		/*
 		if (this->has_goal)
 		{
 			draw_goal_and_path();
 		}//end if
+		*/
 	}
 
 	void MySquirrelAgent::draw_goal_and_path()
@@ -210,6 +212,64 @@ namespace GMUCS425
 
 	void MySquirrelAgent::draw_HUD()
 	{
+		//return;
+		//check if overlapping with bird
+		
+	//check every agent
+		MyScene * m_scene = getMyGame()->getSceneManager()->get_active_scene();
+		const std::list<MyAgent * > & listOfAgents = m_scene->get_agents();
+		for (std::list<MyAgent *>::const_iterator ma = listOfAgents.begin(); ma != listOfAgents.end(); ma++) {
+			//for (const MyAgent & ma : listOfAgents) {
+			if ((*ma)->isBird) {//only bird
+				//check overlap
+				mathtool::Box2d box1, box2;
+				box1.x = x;
+				box1.y = y;
+				box1.width = this->sprite->getWidth(scale);
+				box1.height = this->sprite->getHeight(scale);
+
+				box2.x = (*ma)->x;
+				box2.y = (*ma)->y;
+				box2.width = (*ma)->sprite->getWidth((*ma)->scale);
+				box2.height = (*ma)->sprite->getHeight((*ma)->scale);
+				if (box1.intersect(box2)) {
+					std::stringstream ss;
+					ss << "Bird and Squirrel";
+					SDL_Renderer * renderer = getMyGame()->getRenderer();
+					static TTF_Font* font = NULL;
+
+					if (font == NULL)
+					{
+						font = TTF_OpenFont("fonts/Demo_ConeriaScript.ttf", 72); //this opens a font style and sets a size
+						if (font == NULL)
+						{
+							std::cerr << "! Error: Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+							return;
+						}
+					}
+
+					SDL_Color color = { 255, 255, 255 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+					SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, ss.str().c_str(), color); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+					SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+
+					SDL_Rect Message_rect; //create a rect
+					Message_rect.w = 150; // controls the width of the rect
+					Message_rect.h = 30; // controls the height of the rect
+					Message_rect.x = getMyGame()->getScreenWidth() - Message_rect.w;  //controls the rect's x coordinate
+					Message_rect.y = 10; // controls the rect's y coordinte
+
+					//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+					//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+					SDL_RenderCopy(renderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+
+					//Don't forget to free your surface and texture
+					SDL_FreeSurface(surfaceMessage);
+					SDL_DestroyTexture(Message);
+				}
+			}
+		}
+		
+		return;
 		std::stringstream ss;
 		ss << "x: " << x << " y: " << y;
 		SDL_Renderer * renderer = getMyGame()->getRenderer();

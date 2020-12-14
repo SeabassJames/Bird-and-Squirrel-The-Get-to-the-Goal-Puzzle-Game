@@ -12,6 +12,8 @@ k imgs/chicken.png  0.15
 d imgs/dragon.png 0.075
 b imgs/bird.png 0.075
 s imgs/squirrel.png 0.075
+n imgs/net.png 0.47
+p imgs/pond.png 0.47
 
 World
 oooooooooobooooooooo
@@ -22,12 +24,12 @@ oooooooooooooooooowo
 oooooooooooooooooowo
 oooooooooooooooooowo
 wooooooooooooooooowo
-owwwwwwooooooooooooo
-oooooowooooooooooooo
-oooooowooooooooooooo
+owwwwwwppppooooooooo
+oooooowooopooooooooo
+oooooowooopooooooooo
 oooooowooowwwwwooooo
-oooooowooooooowooooo
-oooooowooozooowooooo
+oooooowooonooowooooo
+oooooowooonooowooooo
 oooooowwwwoooowooooo
 owoooooooooooowooooo
 oooooooooooooowwwwww

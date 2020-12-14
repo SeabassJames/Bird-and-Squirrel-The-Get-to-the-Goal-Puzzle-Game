@@ -10,9 +10,10 @@ namespace GMUCS425
 	class MyBirdAgent : public MyAgent
 	{
 	public:
-		MyBirdAgent(bool movable = true, bool collision = true) :MyAgent(movable, true, false, collision)
+		MyBirdAgent(bool movable = true, bool collision = true) :MyAgent(movable, collision, false, collision)
 		{
 			dx = dy = 0;collide_with = NULL;has_goal = left = false;planner = NULL;
+			this->isBird = true;
 		}
 
 		virtual void handle_event(SDL_Event & e);

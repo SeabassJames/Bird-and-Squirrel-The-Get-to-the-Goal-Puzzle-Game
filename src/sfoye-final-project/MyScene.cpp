@@ -212,6 +212,8 @@ bool MyScene::create( std::istream & inputfile)
         else if(c=='d') agent = new MyDragonAgent(true);
 		else if (c == 'b') agent = new MyBirdAgent(true);
 		else if (c == 's') agent = new MySquirrelAgent(true);
+		else if (c == 'n') agent = new MyNetAgent(true);
+		else if (c == 'p') agent = new MyPondAgent(true);
         else agent = new MyAgent(rent->agent);
 
         assert(agent);
@@ -222,7 +224,7 @@ bool MyScene::create( std::istream & inputfile)
         agent->tranlateTo(j*cell_w,i*cell_h);
         agent->scaleTo(rent->scale);
 
-        if(c=='z' || c=='k' || c=='d')
+        if(c=='z' || c=='k' || c=='d' || c=='b' || c=='s')
           this->m_agents.push_front(agent); //remember
         else this->m_agents.push_back(agent); //remember
       }

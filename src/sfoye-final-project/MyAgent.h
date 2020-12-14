@@ -41,6 +41,8 @@ namespace GMUCS425
 			this->birdcollision = bcollision;
 			this->squirrelcollision = scollision;
 			this->collision = collision;
+			this->isBird = false;
+			this->isSquirrel = false;
 		}
 
         //react to the events
@@ -104,7 +106,7 @@ namespace GMUCS425
         float getAngle() const { return degree; }
         float getScale() const { return scale; }
 
-      protected:
+      //protected:
 
         void draw_bounding_box();
 
@@ -119,6 +121,8 @@ namespace GMUCS425
 			bool birdcollision;
 			bool squirrelcollision;
 
+			bool isBird;
+			bool isSquirrel;
         MySprite * sprite; //current sprite
         //it is possible that you can have more than one sprites
         //vector<MySprite *> sprites; //the sprites
@@ -128,7 +132,7 @@ namespace GMUCS425
     {
       public:
         MyZombieAgent(bool movable=true, bool collision=true)
-        :MyAgent(movable, false, true){orig_x=INT_MAX; left=true; collide_with=NULL;}
+        :MyAgent(movable, false, collision){orig_x=INT_MAX; left=true; collide_with=NULL;}
         virtual void update();
         virtual void display();
         virtual void handle_event(SDL_Event & e);
@@ -143,7 +147,7 @@ namespace GMUCS425
     class MyChickenAgent : public MyAgent
     {
       public:
-        MyChickenAgent(bool movable=true, bool collision=true):MyAgent(movable,false, true)
+        MyChickenAgent(bool movable=true, bool collision=true):MyAgent(movable,collision, false)
         {radius=FLT_MAX; center_x=center_y=INT_MAX; ccw=false; collide_with=NULL;}
         virtual void update();
         virtual void display();
@@ -156,4 +160,39 @@ namespace GMUCS425
         int collision_free_timer=10;
     };
 
+	class MyNetAgent : public MyAgent
+	{
+		public:
+			MyNetAgent(bool movable = false, bool collision = true) :MyAgent(false, true, false, true)
+			{
+				//radius = FLT_MAX; center_x = center_y = INT_MAX; ccw = false; collide_with = NULL;
+			}
+			//virtual void update();
+			//virtual void display();
+			//virtual void handle_event(SDL_Event & e);
+		private:
+			//float radius;
+			//int center_x, center_y;
+			//bool ccw;
+			//MyAgent * collide_with;
+			//int collision_free_timer = 10;
+	};
+
+	class MyPondAgent : public MyAgent
+	{
+	public:
+		MyPondAgent(bool movable = false, bool collision = true) :MyAgent(false, false, true, true)
+		{
+			//radius = FLT_MAX; center_x = center_y = INT_MAX; ccw = false; collide_with = NULL;
+		}
+		//virtual void update();
+		//virtual void display();
+		//virtual void handle_event(SDL_Event & e);
+	private:
+		//float radius;
+		//int center_x, center_y;
+		//bool ccw;
+		//MyAgent * collide_with;
+		//int collision_free_timer = 10;
+	};
 }//end namespace
