@@ -15,15 +15,21 @@ The game uses the engine from our PA assignments, specifically from PA03-Pathing
 The game is interesting/exciting because it will allow the player to control multiple agents separately
 
 Controls:
+
 Move Bird: left click or wasd
+
 Move Squirrel: right click or arrow keys
 
 Objective:
 Get Bird and Squirrel to meet each other
 
 Obstacles:
-Bird and Squirrel can each pass by some obstacles that the other can't. 
+Bird and Squirrel can each pass by some obstacles that the other can't.
+
 Bird can fly past water while Squirrel is blocked by water.
+
 Squirrel can go under nets while Bird is blocked by nets.
+
 Chickens will kill Bird but fly past Squirrel.
+
 Zombies will kill Squirrel but Bird will fly past zombies.
