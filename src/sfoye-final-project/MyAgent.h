@@ -43,6 +43,8 @@ namespace GMUCS425
 			this->collision = collision;
 			this->isBird = false;
 			this->isSquirrel = false;
+			this->isAlive = true;
+			this->isBad = false;
 		}
 
         //react to the events
@@ -123,6 +125,8 @@ namespace GMUCS425
 
 			bool isBird;
 			bool isSquirrel;
+			bool isBad;
+			bool isAlive;
         MySprite * sprite; //current sprite
         //it is possible that you can have more than one sprites
         //vector<MySprite *> sprites; //the sprites
@@ -132,7 +136,10 @@ namespace GMUCS425
     {
       public:
         MyZombieAgent(bool movable=true, bool collision=true)
-        :MyAgent(movable, false, collision){orig_x=INT_MAX; left=true; collide_with=NULL;}
+        :MyAgent(movable, false, collision){
+			orig_x=INT_MAX; left=true; collide_with=NULL;
+			this->isBad = true;
+		}
         virtual void update();
         virtual void display();
         virtual void handle_event(SDL_Event & e);
@@ -148,7 +155,9 @@ namespace GMUCS425
     {
       public:
         MyChickenAgent(bool movable=true, bool collision=true):MyAgent(movable,collision, false)
-        {radius=FLT_MAX; center_x=center_y=INT_MAX; ccw=false; collide_with=NULL;}
+        {radius=FLT_MAX; center_x=center_y=INT_MAX; ccw=false; collide_with=NULL;
+		this->isBad = true;
+		}
         virtual void update();
         virtual void display();
         virtual void handle_event(SDL_Event & e);

@@ -21,59 +21,63 @@ namespace GMUCS425
 				{
 					this->collision = true;
 					this->collide_with = (MyAgent *)((e.user.data1 != this) ? e.user.data1 : e.user.data2);
+					if (this->collide_with->isBad) { //if is enemy
+						this->isAlive = false; //die
+						this->has_goal = false; //dead animals don't have goals
+					}
 				}
 			}
 		}
-
-		//mouse events
-		if (e.type == SDL_MOUSEBUTTONDOWN)
-		{
-			//SDL_MouseButtonEvent * me=(SDL_MouseButtonEvent)
-			if (/*e.button.clicks == 2 && */e.button.button == '\x3') //right click
+		if (isAlive) {
+			//mouse events
+			if (e.type == SDL_MOUSEBUTTONDOWN)
 			{
-				//set goal!
-				int x, y;
-				SDL_GetMouseState(&x, &y);
-				has_goal = true;
-				this->goal = mathtool::Point2d(x, y);
-			}
-			else
-			{
-				//clear goal and path
-				has_goal = false;
-				this->path.clear();
-			}
-		}
-		
-		//No goal assigned, control by arrow keys
-		if (e.type == SDL_KEYDOWN && !this->has_goal)
-		{
-			dx = dy = 0;
-			const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-			if (currentKeyStates[SDL_SCANCODE_UP])
-			{
-				dy = -delta;
-			}
-			else if (currentKeyStates[SDL_SCANCODE_DOWN])
-			{
-				dy = delta;
-			}
-			else if (currentKeyStates[SDL_SCANCODE_LEFT])
-			{
-				left = true;
-				dx = -delta;
-			}
-			else if (currentKeyStates[SDL_SCANCODE_RIGHT])
-			{
-				left = false;
-				dx = delta;
+				//SDL_MouseButtonEvent * me=(SDL_MouseButtonEvent)
+				if (/*e.button.clicks == 2 && */e.button.button == '\x3') //right click
+				{
+					//set goal!
+					int x, y;
+					SDL_GetMouseState(&x, &y);
+					has_goal = true;
+					this->goal = mathtool::Point2d(x, y);
+				}
+				else
+				{
+					//clear goal and path
+					has_goal = false;
+					this->path.clear();
+				}
 			}
 
-			//this should actually be done in update()
-			x += dx;
-			y += dy;
+			//No goal assigned, control by arrow keys
+			if (e.type == SDL_KEYDOWN && !this->has_goal)
+			{
+				dx = dy = 0;
+				const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+				if (currentKeyStates[SDL_SCANCODE_UP])
+				{
+					dy = -delta;
+				}
+				else if (currentKeyStates[SDL_SCANCODE_DOWN])
+				{
+					dy = delta;
+				}
+				else if (currentKeyStates[SDL_SCANCODE_LEFT])
+				{
+					left = true;
+					dx = -delta;
+				}
+				else if (currentKeyStates[SDL_SCANCODE_RIGHT])
+				{
+					left = false;
+					dx = delta;
+				}
+
+				//this should actually be done in update()
+				x += dx;
+				y += dy;
+			}
 		}
-		
 	}
 
 	void MySquirrelAgent::update()
@@ -176,7 +180,13 @@ namespace GMUCS425
 		//MyAgent::display();
 		if (!this->visible) return; //not visible...
 		//setup positions and ask sprite to draw something
-		this->sprite->display(x, y, scale, degree, NULL, this->left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		if (isAlive) {
+			this->sprite->display(x, y, scale, degree, NULL, this->left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		}
+		else {
+			this->sprite->display(x, y, scale, degree, NULL, SDL_FLIP_VERTICAL);//this->left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		}
+
 		//draw_bounding_box();
 		//display goal & path
 		/*
@@ -212,9 +222,44 @@ namespace GMUCS425
 
 	void MySquirrelAgent::draw_HUD()
 	{
-		//return;
+		//if dead
+		if (!isAlive) {
+			std::stringstream ss;
+			ss << "Squirrel is dead!";
+			SDL_Renderer * renderer = getMyGame()->getRenderer();
+			static TTF_Font* font = NULL;
+
+			if (font == NULL)
+			{
+				font = TTF_OpenFont("fonts/Demo_ConeriaScript.ttf", 72); //this opens a font style and sets a size
+				if (font == NULL)
+				{
+					std::cerr << "! Error: Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+					return;
+				}
+			}
+
+			SDL_Color color = { 205, 10, 10 };  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, ss.str().c_str(), color); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+			SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+
+			SDL_Rect Message_rect; //create a rect
+			Message_rect.w = 150; // controls the width of the rect
+			Message_rect.h = 30; // controls the height of the rect
+			Message_rect.x = getMyGame()->getScreenWidth() - Message_rect.w;  //controls the rect's x coordinate
+			Message_rect.y = 10; // controls the rect's y coordinte
+
+			//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
+			//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+			SDL_RenderCopy(renderer, Message, NULL, &Message_rect); //you put the renderer's name first, the Message, the crop size(you can ignore this if you don't want to dabble with cropping), and the rect which is the size and coordinate of your texture
+
+			//Don't forget to free your surface and texture
+			SDL_FreeSurface(surfaceMessage);
+			SDL_DestroyTexture(Message);
+			return;
+		}
+
 		//check if overlapping with bird
-		
 	//check every agent
 		MyScene * m_scene = getMyGame()->getSceneManager()->get_active_scene();
 		const std::list<MyAgent * > & listOfAgents = m_scene->get_agents();
@@ -234,7 +279,7 @@ namespace GMUCS425
 				box2.height = (*ma)->sprite->getHeight((*ma)->scale);
 				if (box1.intersect(box2)) {
 					std::stringstream ss;
-					ss << "Bird and Squirrel";
+					ss << "Bird and Squirrel win!";
 					SDL_Renderer * renderer = getMyGame()->getRenderer();
 					static TTF_Font* font = NULL;
 
@@ -255,8 +300,8 @@ namespace GMUCS425
 					SDL_Rect Message_rect; //create a rect
 					Message_rect.w = 150; // controls the width of the rect
 					Message_rect.h = 30; // controls the height of the rect
-					Message_rect.x = getMyGame()->getScreenWidth() - Message_rect.w;  //controls the rect's x coordinate
-					Message_rect.y = 10; // controls the rect's y coordinte
+					Message_rect.x = (getMyGame()->getScreenWidth() - Message_rect.w)/2;  //controls the rect's x coordinate
+					Message_rect.y = 100; // controls the rect's y coordinte
 
 					//Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
 					//Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes

@@ -1,5 +1,5 @@
 20 20
-perlin 3 3 cubic 1 0.1 blend imgs/rock.jpeg imgs/water.jpeg
+perlin 4 4 cubic 1 0.1 blend imgs/dry.jpg imgs/grass.png
 
 Objects
 b imgs/cannonball.png 0.0 0.15
@@ -10,26 +10,29 @@ Characters
 z imgs/zombie.png 0.1
 k imgs/chicken.png  0.15
 d imgs/dragon.png 0.075
-
+p imgs/pond.png 0.47
+s imgs/squirrel.png 0.075
+b imgs/bird.png 0.075
+n imgs/net.png 0.47
 
 World
-boooozoodooooobooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-oootoooooooooooooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-owwwwwwooooooooooooo
-oooooowooooooooooooo
-okoooowooooooooooooo
-oooooowooowwwwwooooo
-oooooowoootooowooooo
-oooooooooooooowooooo
-oooooooooooooowooooo
-otoooooooooooooooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-oooooooooooooooooooo
-booooooooooooobooooo
+wwwwwwwwwwwwwwwwwwww
+woooooooooooooooooow
+woooooooooooooboooow
+wooopoooooooooooooow
+woookoooooooooooooow
+woooooooooooooooooow
+wpppppwwwwwwwwwwwwww
+woooooooooooooooooow
+woooooooooooooooooow
+woooooooooooooooooow
+wwwwwwwwwwwwwoooooow
+wwwwwwnnnnnnwnnnnwww
+woooooonnnnnwnnnooow
+woooooooopooooooooow
+woooooooopooooozooow
+woooooooopooooooooow
+wwnnnnnnnwwwwwwwwwww
+woooooooooooooooooow
+wooooooooooooosoooow
+wwwwwwwwwwwwwwwwwwww
