@@ -20,10 +20,14 @@ Move Bird: left click or wasd
 
 Move Squirrel: right click or arrow keys
 
+
 Objective:
+
 Get Bird and Squirrel to meet each other
 
+
 Obstacles:
+
 Bird and Squirrel can each pass by some obstacles that the other can't.
 
 Bird can fly past water while Squirrel is blocked by water.
